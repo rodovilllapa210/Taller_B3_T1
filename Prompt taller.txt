@@ -1,0 +1,408 @@
+Vamos a hacer una práctica que está contenida en el archivo Taller_B3_T1.pdf
+Vamos a generar: un único notebook en el que demuestres, con código + gráficas + una breve explicación en Markdown, que sabes aplicar 5 técnicas de preprocesado financiero para ML sobre datos intradía rápidos, idealmente de criptomonedas.
+Qué tienes que entregar exactamente
+Un Jupyter Notebook con estos elementos:
+•	código que aplique cada técnica,
+•	una o varias gráficas para comparar opciones,
+•	una explicación breve del efecto de cada técnica,
+•	todo en un solo archivo.
+Quiero que incluyas comentarios al código en español de forma muy exhaustiva.
+Lo que evaluarán además no es solo que corra el código, sino sobre todo que haya gráfica y explicación razonada.
+1) Construir distintos tipos de barras
+Tienes que partir de datos de mercado rápidos que están en la carpeta /data y reconstruir la serie temporal de tres formas:
+•	tick bars
+•	volume bars
+•	dollar bars
+Qué significa
+En vez de usar velas temporales normales de 1 min, 5 min, etc., vas a reagrupar los datos por:
+•	número de transacciones,
+•	volumen negociado,
+•	valor monetario negociado.
+Qué esperan ver
+Que muestres cómo cambian los datos según el tipo de barra:
+•	cuántas barras salen,
+•	cómo cambia la regularidad,
+•	cómo cambia la volatilidad o el ruido visual.
+Qué puedes graficar
+•	precio en el tiempo con cada tipo de barra,
+•	número de barras generadas,
+•	distribución del retorno por tipo de barra,
+•	volatilidad estimada por tipo de barra.
+2) Aplicar diferenciación fraccional con varios valores de d
+Sobre una serie que ya hayas construido, debes aplicar fractional differentiation con varios valores de d.
+Qué significa
+No es una diferencia entera clásica (x_t - x_{t-1}), sino una transformación que intenta lograr un equilibrio entre:
+•	hacer la serie más estacionaria,
+•	sin destruir tanta memoria como una diferenciación normal.
+Qué esperan ver
+Que compares varios d y expliques:
+•	con d pequeño, la serie conserva más memoria,
+•	con d grande, se parece más a una diferenciación clásica,
+•	cómo afecta eso a la estacionariedad y a la forma de la serie.
+Qué puedes graficar
+•	la serie original vs series diferenciadas,
+•	ACF/autocorrelación,
+•	test de estacionariedad,
+•	correlación con la serie original para distintos d.
+3) Limpiar matrices de covarianza ruidosa
+Tienes que construir una matriz de covarianza y aplicar alguna técnica de denoising o limpieza del ruido.
+Qué significa
+Las matrices de covarianza estimadas con datos financieros suelen ser muy ruidosas, sobre todo con muchos activos y pocas observaciones efectivas. La idea es comparar:
+•	matriz original,
+•	matriz “limpia”.
+Qué esperan ver
+Que enseñes que la matriz original puede ser inestable o poco fiable y que la limpieza:
+•	suaviza autovalores extremos,
+•	hace más robusta la estructura de riesgo,
+•	reduce ruido estadístico.
+Qué puedes graficar
+•	heatmap de la covarianza antes y después,
+•	espectro de autovalores,
+•	comparación visual de correlaciones.
+4) Etiquetar datos con el método de la triple barrera
+Debes crear etiquetas usando triple barrier con varios thresholds.
+Qué significa
+A cada observación le asignas una etiqueta según cuál de estas barreras toca primero:
+•	barrera superior: ganancia,
+•	barrera inferior: pérdida,
+•	barrera temporal: expiración.
+Qué esperan ver
+Que muestres cómo cambian las etiquetas cuando cambias los thresholds:
+•	barreras más estrechas → más eventos, quizá más ruido,
+•	barreras más amplias → menos eventos, quizá más selectivos.
+Qué puedes graficar
+•	ejemplos de trayectorias con barreras dibujadas,
+•	distribución de etiquetas,
+•	porcentaje de clases por configuración.
+5) Separar datos para validación cruzada con varios porcentajes
+Tienes que dividir los datos para validación, probando varios porcentajes.
+Qué significa
+No basta con entrenar y probar una vez. Debes mostrar cómo separar la muestra para validar el modelo o el pipeline, variando el tamaño de train/test.
+Qué esperan ver
+Que compares distintos splits, por ejemplo:
+•	60/40
+•	70/30
+•	80/20
+Y que expliques cómo afecta eso a:
+•	cantidad de datos de entrenamiento,
+•	robustez de la validación,
+•	riesgo de overfitting.
+Qué puedes graficar
+•	esquema temporal de los splits,
+•	tamaño de train y test,
+•	si quieres, una tabla resumen de cada partición.
+Cuando hagamos la separación de los datos meteremos un pequeño gap entre el último dato de training y el primero de test para que no haya continuidad en los datos. Si no entiendes esto hazme preguntas para aclararlo.
+La frase más importante del enunciado
+Hay una instrucción clave: cada técnica puede depender de la anterior. Es decir, no tienes que rehacer todo desde cero cada vez. Puedes montar un pipeline secuencial así:
+datos raw → bars → fractional differentiation → covarianza → triple barrier → validación
+Pero como en cada paso hay varias opciones, el enunciado dice que, si una técnica depende de la anterior, elijas una de las opciones del paso anterior para continuar.
+Eso significa, por ejemplo:
+•	comparas tick/volume/dollar bars,
+•	eliges una de ellas,
+•	sobre esa aplicas varios d,
+•	eliges un d,
+•	con esa salida haces la covarianza,
+•	etc.
+Qué no están pidiendo
+No están pidiendo:
+•	entrenar un modelo ML completo,
+•	hacer un paper teórico,
+•	demostrar que una técnica es “la mejor” universalmente.
+Te están pidiendo más bien un taller aplicado de preprocesado, donde demuestres que entiendes:
+1.	qué hace cada técnica,
+2.	cómo se implementa,
+3.	qué cambia al modificar parámetros,
+4.	cómo interpretarlo visualmente.
+________________________________________
+Cómo debería verse un notebook correcto
+Una estructura buena sería:
+1.	Introducción
+o	objetivo del taller
+o	dataset usado
+2.	Carga y limpieza básica
+o	lectura de datos
+o	inspección inicial
+3.	Bloque 1: Bars
+o	generación
+o	gráficas
+o	comentario
+4.	Bloque 2: Fractional differentiation
+o	varios d
+o	gráficas
+o	comentario
+5.	Bloque 3: Covariance denoising
+o	matriz original vs limpia
+o	gráficas
+o	comentario
+6.	Bloque 4: Triple barrier
+o	varios thresholds
+o	gráficas
+o	comentario
+7.	Bloque 5: Validación cruzada
+o	varios porcentajes
+o	esquema/tabla
+o	comentario
+8.	Conclusión breve
+o	qué configuración te parece más razonable y por qué
+Guion de notebook: un único notebook, con datos de 5 minutos o menos, aplicando las 5 técnicas, generando gráficas comparativas y añadiendo una breve interpretación en Markdown en cada bloque. Además, lo montamos como un pipeline secuencial.
+Estructura exacta del notebook, celda por celda
+Celda 1 — Markdown
+Título del notebook
+Texto sugerido:
+•	título de la práctica
+•	asignatura / taller
+•	integrantes del grupo
+•	fecha
+Ejemplo:
+Taller B3-T1 — Preprocesado de datos financieros para ML
+Aplicación de bars, diferenciación fraccional, limpieza de covarianzas, triple barrier y validación cruzada sobre datos intradía de criptomonedas.
+________________________________________
+Celda 2 — Markdown
+Objetivo y plan del notebook
+Aquí explicas en 6-8 líneas:
+•	que el objetivo es aplicar las 5 técnicas pedidas;
+•	que usarás datos intradía de criptomonedas;
+•	que seguirás un pipeline secuencial;
+•	que en cada bloque compararás varias opciones y comentarás su efecto.
+Texto base:
+El objetivo de este notebook es aplicar distintas técnicas de preprocesado financiero para ML sobre datos intradía de criptomonedas. Se comparan distintos tipos de barras, varios grados de diferenciación fraccional, una técnica de limpieza de covarianza, distintos thresholds en triple barrier y varios esquemas de validación temporal. En cada bloque se incluyen gráficas y una breve interpretación de resultados.
+________________________________________
+Celda 3 — Código
+________________________________________
+Celda 4 — Código
+Configuración general
+________________________________________
+Celda 5 — Markdown
+Descripción del dataset
+Aquí explicas:
+•	por qué eliges cripto;
+•	por qué frecuencia 1m;
+•	por qué varios activos;
+•	que BTC será el activo principal para algunos bloques.
+Esto encaja muy bien con el enunciado, que pide datos rápidos y sugiere criptomonedas.
+________________________________________
+Celda 6 — Código
+Descarga / carga de datos
+Objetivo:
+•	descargar OHLCV de varios activos;
+•	construir un diccionario o DataFrame por activo;
+•	homogeneizar timestamps.
+________________________________________
+Celda 7 — Código
+Inspección inicial
+Haz:
+•	head()
+•	shape
+•	rango temporal
+•	NaN
+•	duplicados
+•	frecuencia aproximada
+________________________________________
+Celda 8 — Código
+Limpieza básica
+Haz:
+•	ordenar por tiempo
+•	eliminar duplicados
+•	tratar NaN
+•	asegurar tipos numéricos
+Y añade retornos simples o log-retornos básicos:
+________________________________________
+Celda 9 — Markdown
+Comentario de limpieza
+Texto corto:
+Antes de aplicar técnicas de preprocesado más avanzadas, se revisa la calidad del dato: orden temporal, valores perdidos, duplicados y consistencia de precios/volumen. Este paso es importante porque todas las transformaciones posteriores dependen de una base limpia.
+________________________________________
+BLOQUE 1 — BARS
+Celda 10 — Código
+Funciones para construir bars
+Crea funciones:
+•	tick_bars(df, n_ticks)
+•	volume_bars(df, vol_threshold)
+•	dollar_bars(df, dollar_threshold)
+Cada una debe devolver OHLCV agregado.
+________________________________________
+Celda 11 — Código
+Generar bars para BTC
+Aplica las 3 funciones al activo principal.
+________________________________________
+Celda 12 — Código
+Comparación gráfica de bars
+Gráficas recomendadas:
+•	serie de close para cada tipo de bar;
+•	histograma o densidad de retornos;
+•	número de barras generadas;
+•	volatilidad de retornos por tipo.
+Muy útil:
+summary_bars = pd.DataFrame({
+    "n_obs": [len(btc_tick), len(btc_vol), len(btc_dollar)],
+    "ret_std": [
+        np.log(btc_tick["close"]).diff().std(),
+        np.log(btc_vol["close"]).diff().std(),
+        np.log(btc_dollar["close"]).diff().std()
+    ]
+}, index=["tick", "volume", "dollar"])
+________________________________________
+Celda 13 — Markdown
+Interpretación del bloque 1
+Aquí debes escribir 6-10 líneas. Idea base:
+Los tres esquemas generan particiones distintas del mercado. Las tick bars normalizan por número de transacciones, las volume bars por cantidad negociada y las dollar bars por valor monetario intercambiado. En general, las barras basadas en actividad de mercado suelen adaptarse mejor a periodos de mayor o menor intensidad que las barras de tiempo fijo. Para el resto del notebook se selecciona la opción que ofrece un equilibrio más razonable entre estabilidad y sensibilidad.
+Y al final:
+Elección para continuar: por ejemplo, dollar bars.
+Eso es importante, porque el enunciado permite que cada técnica dependa de la anterior, eligiendo una opción para seguir.
+________________________________________
+BLOQUE 2 — DIFFERENTIACIÓN FRACCIONAL
+Celda 14 — Código
+Función de fractional differentiation
+Implementa:
+•	cálculo de pesos fraccionales;
+•	función que aplique la transformación a una serie.
+________________________________________
+Celda 15 — Código
+Aplicar varios valores de d
+Usa, por ejemplo:
+d_values = [0.2, 0.4, 0.6, 0.8, 1.0]
+Aplica sobre el close o log-precio de la serie elegida en el bloque 1.
+Guarda resultados
+________________________________________
+Celda 16 — Código
+Comparación gráfica y estadística
+Haz al menos dos cosas:
+•	plot de series transformadas;
+•	tabla con:
+o	ADF statistic o p-value,
+o	correlación con la serie original,
+o	número de observaciones válidas.
+________________________________________
+Celda 17 — Markdown
+Interpretación del bloque 2
+Texto base:
+Al aumentar d, la serie gana estacionariedad, pero pierde parte de la memoria de largo plazo y se aleja más de la señal original. El objetivo no es maximizar la diferenciación, sino encontrar un compromiso entre estabilidad estadística y conservación de información. Se selecciona el valor de d que mejora la estacionariedad sin destruir excesivamente la estructura de la serie.
+Y terminas con:
+Elección para continuar: por ejemplo, d = 0.4.
+________________________________________
+BLOQUE 3 — LIMPIEZA DE MATRIZ DE COVARIANZA
+Celda 18 — Código
+Construir panel multiactivo con la opción elegida
+Aquí aplicas a todos los activos:
+•	el tipo de bar elegido;
+•	retornos sobre esa representación.
+Importante: para la covarianza necesitas una matriz T x N, con N activos.
+________________________________________
+Celda 19 — Código
+Covarianza muestral original
+Y representa:
+•	heatmap de correlación/covarianza;
+•	autovalores.
+________________________________________
+Celda 20 — Código
+Aplicar limpieza / denoising
+Puedes usar una versión sencilla y defendible:
+•	descomposición espectral;
+•	sustituir autovalores pequeños por una media;
+•	reconstrucción de la matriz.
+No hace falta montar una implementación extremadamente sofisticada; hace falta que sea clara y que se vea el antes/después.
+________________________________________
+Celda 21 — Código
+Comparación visual antes vs después
+Haz:
+•	heatmap corr_raw
+•	heatmap corr_clean
+•	gráfico de autovalores antes/después
+________________________________________
+Celda 22 — Markdown
+Interpretación del bloque 3
+Texto base:
+La matriz de covarianza muestral contiene ruido de estimación, especialmente en datos financieros de alta frecuencia. La limpieza espectral reduce parte de ese ruido al suavizar autovalores poco informativos. El resultado no elimina la estructura de dependencia entre activos, pero la hace más estable y potencialmente más útil para tareas posteriores de modelización o gestión del riesgo.
+________________________________________
+BLOQUE 4 — TRIPLE BARRIER
+Celda 23 — Código
+Preparar eventos y volatilidad objetivo
+Sobre el activo principal y la representación elegida:
+•	calcula retornos,
+•	calcula volatilidad rolling,
+•	define horizonte vertical.
+________________________________________
+Celda 24 — Código
+Implementar triple barrier
+Función que etiquete con:
+•	+1 si toca profit-taking,
+•	-1 si toca stop-loss,
+•	0 si vence la barrera temporal.
+________________________________________
+Celda 25 — Código
+Aplicar varios thresholds
+Usa varias configuraciones, por ejemplo:
+configs = [(1.0, 1.0), (1.5, 1.5), (2.0, 2.0)]
+O incluso:
+configs = [(1, 1), (1, 2), (2, 1)]
+Genera una tabla con distribución de etiquetas.
+________________________________________
+Celda 26 — Código
+Gráficas del triple barrier
+Haz:
+•	barras con porcentaje de etiquetas por configuración;
+•	1 o 2 ejemplos de trayectoria de precio con barreras dibujadas.
+Eso suele gustar mucho porque hace visible el método.
+________________________________________
+Celda 27 — Markdown
+Interpretación del bloque 4
+Texto base:
+Los thresholds determinan la sensibilidad del etiquetado. Barreras más estrechas generan más eventos de salida y suelen producir etiquetas más reactivas, aunque potencialmente más ruidosas. Barreras más amplias exigen movimientos mayores del precio, por lo que el etiquetado es más selectivo. La elección del umbral afecta directamente al equilibrio entre frecuencia de observaciones y calidad económica de la señal.
+________________________________________
+BLOQUE 5 — VALIDACIÓN CRUZADA
+Celda 28 — Código
+Definir esquemas de split temporal
+Haz splits cronológicos, por ejemplo:
+•	60/40
+•	70/30
+•	80/20
+Ejemplo:
+splits = [0.6, 0.7, 0.8]
+No hagas shuffle.
+Aquí metemos un gap entre los datos de train y test. Por ejemplo, si estuviésemos con series temporales de 13 meses no cogeríamos el del último mes para que no hubiese continuidad entre train y test. Pregúntame para que quede claro.
+________________________________________
+Celda 29 — Código
+Visualizar los splits
+Muy recomendable:
+•	gráfico temporal donde se vea train y test;
+•	tabla resumen con número de observaciones por split.
+________________________________________
+Celda 30 — Markdown
+Interpretación del bloque 5
+Texto base:
+En series financieras la separación debe respetar el orden temporal para evitar fuga de información. Al aumentar el porcentaje de entrenamiento, el modelo dispone de más datos para aprender, pero queda menos muestra para evaluar fuera de muestra. Con porcentajes menores, la validación es más exigente, aunque el entrenamiento dispone de menos información. Por tanto, la elección del split afecta al compromiso entre aprendizaje y robustez de la evaluación.
+Esto encaja con la exigencia de “separar los datos para hacer validación cruzada en varios porcentajes”.
+________________________________________
+CIERRE
+Celda 31 — Markdown
+Conclusiones finales
+Aquí resumes en 10-15 líneas:
+•	qué tipo de bar elegiste y por qué;
+•	qué valor de d te pareció más razonable;
+•	qué cambió al limpiar la covarianza;
+•	qué thresholds de triple barrier fueron más equilibrados;
+•	qué split temporal te pareció más defendible.
+________________________________________
+Celda 32 — Markdown
+Bibliografía
+Incluye los dos libros del enunciado:
+•	López de Prado (2018)
+•	López de Prado (2020)
+________________________________________
+Para no complicarnos demasiado, yo haría este flujo:
+•	Datos: 5 criptos, 1 minuto
+•	Bloque 1: comparas tick / volume / dollar bars sobre BTC
+•	Elección: te quedas con dollar bars
+•	Bloque 2: fractional differentiation sobre BTC en dollar bars
+•	Elección: te quedas con d = 0.4 o 0.6, según ADF/correlación
+•	Bloque 3: aplicas dollar bars a todos los activos y haces la covarianza limpia
+•	Bloque 4: triple barrier sobre BTC con la representación elegida
+•	Bloque 5: splits temporales 60/40, 70/30, 80/20
+Qué te van a penalizar si falta
+Procura no caer en esto:
+•	hacer solo código y no comentar;
+•	poner una técnica sin comparar varias opciones;
+•	usar un único activo también para covarianza;
+•	hacer train/test aleatorio en vez de temporal;
+•	no justificar por qué eliges una opción para pasar al siguiente bloque.
+
